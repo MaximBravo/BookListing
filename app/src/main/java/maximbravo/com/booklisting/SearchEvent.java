@@ -8,16 +8,19 @@ public class SearchEvent {
     private String base = "https://www.googleapis.com/books/v1/volumes";
     private String end;
     private String query;
-    private String maxResults = "10";
+    private String maxResults = "";
     public SearchEvent(String q){
-        query = q;
+        query = q.toLowerCase();
     }
     public SearchEvent(String q, String m){
         query = q.toLowerCase();
         maxResults = m;
     }
     public void buildUrl(){
-        end = "?q=" + query + "&maxResults=" + maxResults;
+        end = "?q=" + query;
+        if(!maxResults.equals("")){
+            end += "&maxResults=" + maxResults;
+        }
         BOOKS_REQUEST_URL = base + end;
     }
     public String getURL(){
@@ -25,5 +28,6 @@ public class SearchEvent {
     }
     public void clearUrl(){
         BOOKS_REQUEST_URL = "";
+        maxResults = "";
     }
 }
