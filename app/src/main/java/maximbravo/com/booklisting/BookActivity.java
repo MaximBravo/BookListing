@@ -34,6 +34,9 @@ public class BookActivity extends AppCompatActivity {
     /** URL to query the USGS dataset for earthquake information */
     private static String BOOKS_REQUEST_URL;
     private ListView bookListView;
+    private ArrayList<Book> bookArrayList;
+    private EditText searchField;
+    private EditText numberOfResultsField;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +48,7 @@ public class BookActivity extends AppCompatActivity {
         task.execute();
 
     }
-    private EditText searchField;
-    private EditText numberOfResultsField;
+
     public void search(View view){
         bookListView.setAdapter(null);
 
@@ -56,8 +58,8 @@ public class BookActivity extends AppCompatActivity {
         String maxResults = numberOfResultsField.getText().toString();
         String searchable = searchField.getText().toString();
         if(!searchable.equals("")) {
-            Toast p = Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT);
-            p.show();
+            Toast toast = Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT);
+            toast.show();
         }
         if(searchable.length() != 0){
             SearchEvent searchEvent;
@@ -73,13 +75,13 @@ public class BookActivity extends AppCompatActivity {
             searchEvent.clearUrl();
         } else {
             if(!searchable.equals("")) {
-                Toast t = Toast.makeText(this, "No results found.", Toast.LENGTH_SHORT);
-                t.show();
+                Toast toast = Toast.makeText(this, "No results found.", Toast.LENGTH_SHORT);
+                toast.show();
             }
         }
     }
 
-    private ArrayList<Book> bookArrayList;
+
     private void updateUi(ArrayList<Book> books) {
         bookArrayList = books;
         BookAdapter bookAdapter = new BookAdapter(this, books);
@@ -98,7 +100,7 @@ public class BookActivity extends AppCompatActivity {
 
 
     private class BookAsyncTask extends AsyncTask<URL, Void, ArrayList<Book>> {
-        private Toast t = Toast.makeText(getApplicationContext(), "No results found.", Toast.LENGTH_SHORT);
+        private Toast toast = Toast.makeText(getApplicationContext(), "No results found.", Toast.LENGTH_SHORT);
         @Override
         protected ArrayList<Book> doInBackground(URL... urls) {
             URL url = createUrl(BOOKS_REQUEST_URL);
@@ -108,13 +110,14 @@ public class BookActivity extends AppCompatActivity {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
                 // TODO Handle the IOException
+                e.printStackTrace();
             }
 
             // Extract relevant fields from the JSON response and create an {@link Event} object
-            ArrayList<Book> book = extractFeatureFromJson(jsonResponse);
+            ArrayList<Book> books = extractFeatureFromJson(jsonResponse);
 
             // Return the {@link Event} object as the result fo the {@link TsunamiAsyncTask}
-            return book;
+            return books;
         }
 
         @Override
@@ -240,7 +243,7 @@ public class BookActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
 
-                t.show();
+                toast.show();
             }
             return null;
         }
