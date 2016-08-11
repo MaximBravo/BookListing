@@ -32,12 +32,14 @@ public class BookActivity extends AppCompatActivity {
 
     /** URL to query the USGS dataset for earthquake information */
     private static String BOOKS_REQUEST_URL;
-
+    private ListView bookListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_activity);
-
+        bookListView = (ListView) findViewById(R.id.list);
+        BookAsyncTask task = new BookAsyncTask();
+        task.execute();
 
     }
     private EditText searchField;
@@ -71,7 +73,7 @@ public class BookActivity extends AppCompatActivity {
     private void updateUi(ArrayList<Book> books) {
         bookArrayList = books;
         BookAdapter bookAdapter = new BookAdapter(this, books);
-        ListView bookListView = (ListView) findViewById(R.id.list);
+
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
