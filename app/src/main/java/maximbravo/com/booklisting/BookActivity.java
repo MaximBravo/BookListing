@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -38,6 +39,8 @@ public class BookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_activity);
         bookListView = (ListView) findViewById(R.id.list);
+        TextView emptyTextview = (TextView) findViewById(R.id.empty_textview);
+        bookListView.setEmptyView(emptyTextview);
         BookAsyncTask task = new BookAsyncTask();
         task.execute();
 
@@ -46,12 +49,16 @@ public class BookActivity extends AppCompatActivity {
     private EditText numberOfResultsField;
     public void search(View view){
         bookListView.setAdapter(null);
-        Toast p = Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT);
-        p.show();
+
         searchField = (EditText) findViewById(R.id.search_field);
+
         numberOfResultsField = (EditText) findViewById(R.id.number_of_results_field);
         String maxResults = numberOfResultsField.getText().toString();
         String searchable = searchField.getText().toString();
+        if(!searchable.equals("")) {
+            Toast p = Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT);
+            p.show();
+        }
         if(searchable.length() != 0){
             SearchEvent searchEvent;
             if(maxResults.length() != 0) {
@@ -65,8 +72,10 @@ public class BookActivity extends AppCompatActivity {
             task.execute();
             searchEvent.clearUrl();
         } else {
-            Toast t = Toast.makeText(this, "No results found.", Toast.LENGTH_SHORT);
-            t.show();
+            if(!searchable.equals("")) {
+                Toast t = Toast.makeText(this, "No results found.", Toast.LENGTH_SHORT);
+                t.show();
+            }
         }
     }
 

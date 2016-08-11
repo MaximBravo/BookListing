@@ -42,4 +42,11 @@
         android:divider="@null"
         android:orientation="vertical"
         android:dividerHeight="0dp"/>
+    <TextView
+        android:id="@+id/empty_textview"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please type in a search query."/>
 </LinearLayout>
