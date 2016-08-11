@@ -17,7 +17,12 @@ public class SearchEvent {
         maxResults = m;
     }
     public void buildUrl(){
-        end = "?q=" + query;
+
+        if(query.split(" ").length == 1){
+            end = "?q=" + query;
+        } else {
+            end = "?q=" + query.replace(" ", "");
+        }
         if(!maxResults.equals("")){
             end += "&maxResults=" + maxResults;
         }

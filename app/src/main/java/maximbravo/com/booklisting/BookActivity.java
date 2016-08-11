@@ -45,6 +45,7 @@ public class BookActivity extends AppCompatActivity {
     private EditText searchField;
     private EditText numberOfResultsField;
     public void search(View view){
+        bookListView.setAdapter(null);
         Toast p = Toast.makeText(this, "Searching...", Toast.LENGTH_SHORT);
         p.show();
         searchField = (EditText) findViewById(R.id.search_field);
